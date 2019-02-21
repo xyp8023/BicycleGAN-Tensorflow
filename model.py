@@ -21,7 +21,7 @@ class BicycleGAN(object):
         self._coeff_gan = args.coeff_gan
         self._coeff_vae = args.coeff_vae
         self._coeff_reconstruct = args.coeff_reconstruct
-        self._coeff_latent = args.coeff_latent
+        #self._coeff_latent = args.coeff_latent
         self._coeff_kl = args.coeff_kl
         self._norm = 'instance' if args.instance_normalization else 'batch'
         self._use_resnet = args.use_resnet
@@ -92,13 +92,14 @@ class BicycleGAN(object):
         loss_gan = (tf.reduce_mean(tf.squared_difference(D_real, 0.9)) +
             tf.reduce_mean(tf.square(D_fake)))
 
-        loss_latent_cycle = tf.reduce_mean(tf.abs(z - z_recon))
+        #loss_latent_cycle = tf.reduce_mean(tf.abs(z - z_recon))
 
         loss_kl = -0.5 * tf.reduce_mean(1 + 2 * z_encoded_log_sigma - z_encoded_mu ** 2 -
                                        tf.exp(2 * z_encoded_log_sigma))
 
         loss = self._coeff_vae * loss_vae_gan - self._coeff_reconstruct * loss_image_cycle + \
-            self._coeff_gan * loss_gan - self._coeff_latent * loss_latent_cycle - \
+            self._coeff_gan * loss_gan - \
+#self._coeff_latent * loss_latent_cycle - \
             self._coeff_kl * loss_kl
 
         # Optimizer
@@ -114,7 +115,7 @@ class BicycleGAN(object):
         # Summaries
         self.loss_vae_gan = loss_vae_gan
         self.loss_image_cycle = loss_image_cycle
-        self.loss_latent_cycle = loss_latent_cycle
+        #self.loss_latent_cycle = loss_latent_cycle
         self.loss_gan = loss_gan
         self.loss_kl = loss_kl
         self.loss = loss

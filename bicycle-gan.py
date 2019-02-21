@@ -27,8 +27,8 @@ parser.add_argument('--coeff_kl', type=float, default=0.01,
                     help='Loss coefficient for KL divergence')
 parser.add_argument('--coeff_reconstruct', type=float, default=10,
                     help='Loss coefficient for reconstruction error')
-parser.add_argument('--coeff_latent', type=float, default=0.5,
-                    help='Loss coefficient for latent cycle loss')
+#parser.add_argument('--coeff_latent', type=float, default=0.5,
+#                    help='Loss coefficient for latent cycle loss')
 parser.add_argument('--instance_normalization', default=False, type=bool,
                     help="Use instance norm instead of batch norm")
 parser.add_argument('--log_step', default=100, type=int,
