@@ -188,7 +188,13 @@ class BicycleGAN(object):
                 image_ab = sess.run(self.image_ab, feed_dict={self.image_a: image_a,
                                                             self.z: z,
                                                             self.is_train: False})
-                imsave('results/r_{}.jpg'.format(step), np.squeeze(image_ab, axis=0))
+                #print image_ab.shape
+
+                image_ab = np.squeeze(image_ab, axis=0)
+                if image_ab.shape[3] == 1:
+                       image_ab = image_ab.reshape(image_ab.shape[0], image_ab.shape[1])
+                # imsave('results/r_{}.png'.format(step), np.squeeze(image_ab, axis=0))
+                imsave('results/r_{}.png'.format(step),image_ab)
 
                 summary_writer.add_summary(fetched[-1], step)
                 summary_writer.flush()
@@ -226,11 +232,15 @@ class BicycleGAN(object):
                 image_rows.append(np.concatenate(images_random[i*5:(i+1)*5], axis=2))
             images = np.concatenate(image_rows, axis=1)
             images = np.squeeze(images, axis=0)
-            imsave(os.path.join(base_dir, 'random_{}.jpg'.format(step)), images)
+            if images.shape[3] == 1:
+                images = images.reshape(images.shape[0], images.shape[1])
+            imsave(os.path.join(base_dir, 'random_{}.png'.format(step)), images)
 
             image_rows = []
             for i in range(5):
                 image_rows.append(np.concatenate(images_linear[i*5:(i+1)*5], axis=2))
             images = np.concatenate(image_rows, axis=1)
             images = np.squeeze(images, axis=0)
-            imsave(os.path.join(base_dir, 'linear_{}.jpg'.format(step)), images)
+            if images.shape[3] == 1:
+                images = images.reshape(images.shape[0], images.shape[1])
+            imsave(os.path.join(base_dir, 'linear_{}.png'.format(step)), images)
