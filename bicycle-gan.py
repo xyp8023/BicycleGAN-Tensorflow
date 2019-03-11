@@ -6,7 +6,7 @@ from datetime import datetime
 
 import tensorflow as tf
 
-from data_loader import get_data
+from sonar_data_loader import get_data
 from model import BicycleGAN
 from utils import logger, makedirs
 
@@ -17,8 +17,9 @@ def str2bool(v):
     return v.lower() == 'true'
 parser.add_argument('--train', default=True, type=str2bool,
                     help="Training mode")
-parser.add_argument('--task', type=str, default='edges2shoes',
+parser.add_argument('--task', type=str, default='sss2depth',
                     help='Task name')
+parser.add_argument('--base_dir', type=str, default='datasets/sss2depth/pix2pix_waterfall_full', help='base directory of dataset')
 parser.add_argument('--coeff_gan', type=float, default=1.0,
                     help='Loss coefficient for GAN loss')
 parser.add_argument('--coeff_vae', type=float, default=1.0,
@@ -43,7 +44,7 @@ parser.add_argument('--use_resnet', default=True, type=bool,
                     help="Use the ResNet model for the encoder")
 parser.add_argument('--load_model', default='',
                     help='Model path to load (e.g., train_2017-07-07_01-23-45)')
-parser.add_argument('--gpu', default="1", type=str,
+parser.add_argument('--gpu', default="0", type=str,
                     help="gpu index for CUDA_VISIBLE_DEVICES")
 
 
@@ -60,7 +61,7 @@ def run(args):
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     logger.info('Read data:')
-    train_A, train_B, test_A, test_B = get_data(args.task, args.image_size)
+    train_A, train_B, test_A, test_B = get_data(args.base_dir, args.image_size, convert_flag=False)
 
     logger.info('Build graph:')
     model = BicycleGAN(args)

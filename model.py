@@ -27,7 +27,7 @@ class BicycleGAN(object):
         self._use_resnet = args.use_resnet
 
         self._augment_size = self._image_size + (30 if self._image_size == 256 else 15)
-        self._image_shape = [self._image_size, self._image_size, 3]
+        self._image_shape = [self._image_size, self._image_size, 1]
 
         self.is_train = tf.placeholder(tf.bool, name='is_train')
         self.lr = tf.placeholder(tf.float32, name='lr')
@@ -76,7 +76,7 @@ class BicycleGAN(object):
 
         # conditional Latent Regressor-GAN: z -> B' -> z'
         image_ab = self.image_ab = G(image_a, z)
-        z_recon, z_recon_mu, z_recon_log_sigma = E(image_ab)
+        # z_recon, z_recon_mu, z_recon_log_sigma = E(image_ab)
 
 
         # Discriminate real/fake images
@@ -98,9 +98,7 @@ class BicycleGAN(object):
                                        tf.exp(2 * z_encoded_log_sigma))
 
         loss = self._coeff_vae * loss_vae_gan - self._coeff_reconstruct * loss_image_cycle + \
-            self._coeff_gan * loss_gan - \
-#self._coeff_latent * loss_latent_cycle - \
-            self._coeff_kl * loss_kl
+            self._coeff_gan * loss_gan - self._coeff_kl * loss_kl
 
         # Optimizer
         update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
@@ -122,7 +120,7 @@ class BicycleGAN(object):
 
         tf.summary.scalar('loss/vae_gan', loss_vae_gan)
         tf.summary.scalar('loss/image_cycle', loss_image_cycle)
-        tf.summary.scalar('loss/latent_cycle', loss_latent_cycle)
+        #tf.summary.scalar('loss/latent_cycle', loss_latent_cycle)
         tf.summary.scalar('loss/gan', loss_gan)
         tf.summary.scalar('loss/kl', loss_kl)
         tf.summary.scalar('loss/total', loss)

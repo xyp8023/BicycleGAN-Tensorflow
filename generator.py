@@ -38,8 +38,10 @@ class Generator(object):
                 G = ops.deconv_block(G, n, 'CD{}_{}'.format(n, i), 4, 2, self._is_train,
                                 self._reuse, norm=self._norm, activation='relu')
                 G = tf.concat([G, layers.pop()], axis=3)
-            G = ops.deconv_block(G, 3, 'last_layer', 4, 2, self._is_train,
+            G = ops.deconv_block(G, 1, 'last_layer', 4, 2, self._is_train,
                                self._reuse, norm=None, activation='tanh')
+            # G = ops.deconv_block(G, 3, 'last_layer', 4, 2, self._is_train,
+            #                    self._reuse, norm=None, activation='tanh')
 
             self._reuse = True
             self.var_list = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, self.name)
