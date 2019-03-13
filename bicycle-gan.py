@@ -19,7 +19,7 @@ parser.add_argument('--train', default=True, type=str2bool,
                     help="Training mode")
 parser.add_argument('--task', type=str, default='sss2depth',
                     help='Task name')
-parser.add_argument('--base_dir', type=str, default='datasets/sss2depth/pix2pix_waterfall_full', help='base directory of dataset')
+parser.add_argument('--base_dir', type=str, default='datasets/depth2sss/pix2pix_waterfall_full_depth2sss', help='base directory of dataset')
 parser.add_argument('--coeff_gan', type=float, default=1.0,
                     help='Loss coefficient for GAN loss')
 parser.add_argument('--coeff_vae', type=float, default=1.0,

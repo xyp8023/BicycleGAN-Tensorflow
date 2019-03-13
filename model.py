@@ -145,7 +145,7 @@ class BicycleGAN(object):
         num_batch = data_size // self._batch_size
         epoch_length = num_batch * self._batch_size
 
-        num_initial_iter = 8
+        num_initial_iter = 10
         num_decay_iter = 2
         lr = lr_initial = 0.0002
         lr_decay = lr_initial / num_decay_iter
@@ -189,9 +189,11 @@ class BicycleGAN(object):
                                                             self.z: z,
                                                             self.is_train: False})
                 #print image_ab.shape
-
+                f = open('image_ab_shape.txt','w+')
+                f.write('image_ab has shape {}'.format(image_ab.shape))
+                f.close()
                 image_ab = np.squeeze(image_ab, axis=0)
-                if image_ab.shape[3] == 1:
+                if image_ab.shape[2] == 1:
                        image_ab = image_ab.reshape(image_ab.shape[0], image_ab.shape[1])
                 # imsave('results/r_{}.png'.format(step), np.squeeze(image_ab, axis=0))
                 imsave('results/r_{}.png'.format(step),image_ab)
@@ -214,14 +216,15 @@ class BicycleGAN(object):
             images_linear.append(image_b)
 
             for i in range(23):
-                z = np.random.normal(size=(1, self._latent_dim))
+                #z = np.random.normal(size=(1, self._latent_dim))
+                z = np.zeros((1, self._latent_dim))
                 image_ab = sess.run(self.image_ab, feed_dict={self.image_a: image_a,
                                                         self.z: z,
                                                         self.is_train: False})
                 images_random.append(image_ab)
 
                 z = np.zeros((1, self._latent_dim))
-                z[0][0] = (i / 23.0 - 0.5) * 2.0
+                #z[0][0] = (i / 23.0 - 0.5) * 2.0
                 image_ab = sess.run(self.image_ab, feed_dict={self.image_a: image_a,
                                                         self.z: z,
                                                         self.is_train: False})
@@ -232,7 +235,11 @@ class BicycleGAN(object):
                 image_rows.append(np.concatenate(images_random[i*5:(i+1)*5], axis=2))
             images = np.concatenate(image_rows, axis=1)
             images = np.squeeze(images, axis=0)
-            if images.shape[3] == 1:
+            #f = open('images_shape.txt','w+')
+            #f.write('the shape is {}'.format(images.shape))
+            #f.close()
+            #print images.shape
+            if images.shape[2] == 1:
                 images = images.reshape(images.shape[0], images.shape[1])
             imsave(os.path.join(base_dir, 'random_{}.png'.format(step)), images)
 
@@ -241,6 +248,10 @@ class BicycleGAN(object):
                 image_rows.append(np.concatenate(images_linear[i*5:(i+1)*5], axis=2))
             images = np.concatenate(image_rows, axis=1)
             images = np.squeeze(images, axis=0)
-            if images.shape[3] == 1:
+            #f = open('images_linear_shape.txt','w+')
+            #f.write('the shape is {}'.format(images.shape))
+            #f.close()
+            #print images.shape
+            if images.shape[2] == 1:
                 images = images.reshape(images.shape[0], images.shape[1])
             imsave(os.path.join(base_dir, 'linear_{}.png'.format(step)), images)
